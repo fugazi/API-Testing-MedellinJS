@@ -1,0 +1,494 @@
+{
+	"info": {
+		"_postman_id": "e50ce754-06b8-457a-9c62-f5cf8e203c23",
+		"name": "Contact list",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Basic Endpoint Tests",
+			"item": [
+				{
+					"name": "GetContactList",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "02cdbaad-265d-4371-b605-44710eb95e4d",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Content-Type is application/json\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://3.13.86.142:3000/contacts",
+							"protocol": "http",
+							"host": [
+								"3",
+								"13",
+								"86",
+								"142"
+							],
+							"port": "3000",
+							"path": [
+								"contacts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostAddContact",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "4708fbc7-aa12-4839-8b98-4a200204aa2d",
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.environment.set(\"contactId\", \"jsonData._id\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"{{firstName}}\",\r\n    \"lastName\": \"{{lastName}}\",\r\n    \"email\": \"{{email}}\",\r\n    \"location\": {\r\n        \"city\": \"{{city}}\",\r\n        \"country\": \"{{country}}\"\r\n    },\r\n    \"employer\": {\r\n    \t\"jobTitle\": \"{{jobTitle}}\",\r\n    \t\"company\": \"{{company}}\"\r\n    }\r\n}"
+						},
+						"url": {
+							"raw": "http://3.13.86.142:3000/contacts",
+							"protocol": "http",
+							"host": [
+								"3",
+								"13",
+								"86",
+								"142"
+							],
+							"port": "3000",
+							"path": [
+								"contacts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetContact",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8c89d663-52c5-45a5-8e7b-b09a765c881d",
+								"exec": [
+									"pm.environment.set(\"contactId\", \"5ef3765d1707340476571d3b\");\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"El mail en el body es correcto\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"douglas@test.com\");\r",
+									"});\r",
+									"\r",
+									"let jsonData = pm.response.json();\r",
+									"pm.test(\"El campo firstName es correcto\", function () {\r",
+									"    pm.expect(jsonData.firstName).to.eql(environment.firstName);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"El campo lastName es correcto\", function () {\r",
+									"    pm.expect(jsonData.lastName).to.eql(environment.lastName);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"El campo city es correcto\", function () {\r",
+									"    pm.expect(jsonData.location.city).to.eql(\"Medellin, NY\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"El campo country es correcto\", function () {\r",
+									"    pm.expect(jsonData.location.country).to.eql(\"Colombia\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://3.13.86.142:3000/contacts/{{contactId}}",
+							"protocol": "http",
+							"host": [
+								"3",
+								"13",
+								"86",
+								"142"
+							],
+							"port": "3000",
+							"path": [
+								"contacts",
+								"{{contactId}}"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteContact",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Alex\",\r\n    \"lastName\": \"Urrea\",\r\n    \"email\": \"aurrea@thinkingtester.com\",\r\n    \"location\": {\r\n        \"city\": \"Medellin, FL\",\r\n        \"country\": \"Colombia\"\r\n    },\r\n    \"employer\": {\r\n    \t\"jobTitle\": \"Product Manager\",\r\n    \t\"company\": \"Apple\"\r\n    }\r\n}"
+						},
+						"url": {
+							"raw": "http://3.13.86.142:3000/contacts/5ef3765d1707340476571d3b",
+							"protocol": "http",
+							"host": [
+								"3",
+								"13",
+								"86",
+								"142"
+							],
+							"port": "3000",
+							"path": [
+								"contacts",
+								"5ef3765d1707340476571d3b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PutUpdateContact",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Douglas\",\r\n    \"lastName\": \"Urrea\",\r\n    \"email\": \"durrea@thinkingtester.com\",\r\n    \"location\": {\r\n        \"city\": \"Boston, MA\",\r\n        \"country\": \"USA\"\r\n    },\r\n    \"employer\": {\r\n    \t\"jobTitle\": \"Software Tester\",\r\n    \t\"company\": \"Microsoft\"\r\n    }\r\n}"
+						},
+						"url": {
+							"raw": "http://3.13.86.142:3000/contacts/5e9f54eb17073404765648be",
+							"protocol": "http",
+							"host": [
+								"3",
+								"13",
+								"86",
+								"142"
+							],
+							"port": "3000",
+							"path": [
+								"contacts",
+								"5e9f54eb17073404765648be"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Negative Tests",
+			"item": [
+				{
+					"name": "GetContact-NotFound",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "16c57660-ee60-42b4-afc8-25f0b9dc6b3c",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://3.13.86.142:3000/contacts/5ec48e04170734047656b712x",
+							"protocol": "http",
+							"host": [
+								"3",
+								"13",
+								"86",
+								"142"
+							],
+							"port": "3000",
+							"path": [
+								"contacts",
+								"5ec48e04170734047656b712x"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostAddContact-MissingRequiredFields",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0fa5edba-aa9a-4135-8dd2-4dbb29cf9dd3",
+								"exec": [
+									"pm.test(\"No encuentra el campo firstName, lastName como requerido\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"firstName\", \"lastName\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"La validación del mensaje es correcto\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"First Name is required\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"\",\r\n    \"lastName\": \"\",\r\n    \"email\": \"asmith@thinkingtester.com\",\r\n    \"location\": {\r\n        \"city\": \"Boston, MA\",\r\n        \"country\": \"USA\"\r\n    },\r\n    \"employer\": {\r\n    \t\"jobTitle\": \"Software Tester\",\r\n    \t\"company\": \"Microsoft\"\r\n    }\r\n}"
+						},
+						"url": {
+							"raw": "http://3.13.86.142:3000/contacts/",
+							"protocol": "http",
+							"host": [
+								"3",
+								"13",
+								"86",
+								"142"
+							],
+							"port": "3000",
+							"path": [
+								"contacts",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostAddContact-MissingRequiredFields-employer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "04ae2726-621f-43f4-8d8c-40fb6dc33c31",
+								"exec": [
+									"pm.test(\"No encuentra el campo jobTitle, company como requerido\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"jobTitle\", \"company\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"La validación del mensaje es correcto\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"employer.jobTitle: Validator failed for path `jobTitle`\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Elon\",\r\n    \"lastName\": \"Musk\",\r\n    \"email\": \"asmith@thinkingtester.com\",\r\n    \"location\": {\r\n        \"city\": \"Boston, MA\",\r\n        \"country\": \"USA\"\r\n    },\r\n    \"employer\": {\r\n    \t\"jobTitle\": \"\",\r\n    \t\"company\": \"\"\r\n    }\r\n}"
+						},
+						"url": {
+							"raw": "http://3.13.86.142:3000/contacts/",
+							"protocol": "http",
+							"host": [
+								"3",
+								"13",
+								"86",
+								"142"
+							],
+							"port": "3000",
+							"path": [
+								"contacts",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostAddContact-TooLong",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Douglas\",\r\n    \"lastName\": \"Fugazi\",\r\n    \"email\": \"asmith@thinkingtester.com\",\r\n    \"location\": {\r\n        \"city\": \"Boston, MA\",\r\n        \"country\": \"USA\"\r\n    },\r\n    \"employer\": {\r\n    \t\"jobTitle\": \"Software Tester\",\r\n    \t\"company\": \"I'm Cool\"\r\n    }\r\n}"
+						},
+						"url": {
+							"raw": "http://3.13.86.142:3000/contacts",
+							"protocol": "http",
+							"host": [
+								"3",
+								"13",
+								"86",
+								"142"
+							],
+							"port": "3000",
+							"path": [
+								"contacts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PutUpdateContact-Email",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "bae59fd8-9038-4a91-9c17-b05bb2447389",
+								"exec": [
+									"pm.test(\"No encuentra el campo email como requerido\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"email\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"La validación del mensaje es correcto\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"email: Email is required\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Douglas\",\r\n    \"lastName\": \"Urrea\",\r\n    \"email\": \"\",\r\n    \"location\": {\r\n        \"city\": \"Boston, MA\",\r\n        \"country\": \"USA\"\r\n    },\r\n    \"employer\": {\r\n    \t\"jobTitle\": \"Software Tester\",\r\n    \t\"company\": \"Microsoft\"\r\n    }\r\n}"
+						},
+						"url": {
+							"raw": "http://3.13.86.142:3000/contacts/5ecf1dd1170734047656cdb9",
+							"protocol": "http",
+							"host": [
+								"3",
+								"13",
+								"86",
+								"142"
+							],
+							"port": "3000",
+							"path": [
+								"contacts",
+								"5ecf1dd1170734047656cdb9"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "22db3f2f-29af-4945-b690-39d428f8b2af",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "9eeace72-336e-485b-935b-c18ea456074b",
+				"type": "text/javascript",
+				"exec": [
+					"pm.test(\"Response time is less than 2000ms\", function () {",
+					"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+					"});"
+				]
+			}
+		}
+	]
+}

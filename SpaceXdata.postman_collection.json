@@ -1,0 +1,238 @@
+{
+	"info": {
+		"_postman_id": "4b6337cd-0446-432f-9473-49e03c79710b",
+		"name": "SpaceXdata",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Capsules",
+			"item": [
+				{
+					"name": "AllCapsules",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.spacexdata.com/v3/capsules",
+							"protocol": "https",
+							"host": [
+								"api",
+								"spacexdata",
+								"com"
+							],
+							"path": [
+								"v3",
+								"capsules"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "OneCapsule",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.spacexdata.com/v3/capsules/5e9e2c5bf3591882af3b2665",
+							"protocol": "https",
+							"host": [
+								"api",
+								"spacexdata",
+								"com"
+							],
+							"path": [
+								"v3",
+								"capsules",
+								"5e9e2c5bf3591882af3b2665"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.spacexdata.com/v3/info",
+							"protocol": "https",
+							"host": [
+								"api",
+								"spacexdata",
+								"com"
+							],
+							"path": [
+								"v3",
+								"info"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Missions",
+			"item": [
+				{
+					"name": "AllMissions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.spacexdata.com/v3/launches",
+							"protocol": "https",
+							"host": [
+								"api",
+								"spacexdata",
+								"com"
+							],
+							"path": [
+								"v3",
+								"launches"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "3",
+									"disabled": true
+								},
+								{
+									"key": "offset",
+									"value": "80",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "OneMission",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.spacexdata.com/v3/missions/6C42550",
+							"protocol": "https",
+							"host": [
+								"api",
+								"spacexdata",
+								"com"
+							],
+							"path": [
+								"v3",
+								"missions",
+								"6C42550"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Rockets",
+			"item": [
+				{
+					"name": "AllRockets",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.spacexdata.com/v3/rockets",
+							"protocol": "https",
+							"host": [
+								"api",
+								"spacexdata",
+								"com"
+							],
+							"path": [
+								"v3",
+								"rockets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "OneRocket",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e954772d-9018-4486-8e3c-5b6a9628b45b",
+								"exec": [
+									"\r",
+									"// Verify the response status code:\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});\r",
+									"\r",
+									"pm.test('response should be 200 or 302', function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 302]);\r",
+									"});\r",
+									"\r",
+									"// Verify the response time of the request:\r",
+									"pm.test(\"Response time is less than 500ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+									"});\r",
+									"\r",
+									"// Verify Headers Content-Type\r",
+									"pm.test(\"Content-Type is application/json\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8\");\r",
+									"});\r",
+									"\r",
+									"// Verify the data returned by the request:\r",
+									"pm.test(\"Verify the rocket name\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Falcon 9\");\r",
+									"});\r",
+									"\r",
+									"// Verify the JSON value to a field\r",
+									"pm.test(\"The value is equal to a string\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.company).to.eql(\"SpaceX\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.spacexdata.com/v3/rockets/falcon9",
+							"protocol": "https",
+							"host": [
+								"api",
+								"spacexdata",
+								"com"
+							],
+							"path": [
+								"v3",
+								"rockets",
+								"falcon9"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
